@@ -1,0 +1,86 @@
+clear all
+%% Q4 Part D
+A=[-1, 1, 0;0,-1,0;0,0,1];
+B=[0;1;1];
+C=[1,1,0];
+D=0;
+xInit=[4;6;3];
+
+sys0 = ss(A,B,C,D);
+
+Q=eye(3);
+R=1;
+
+[K,S,P] = lqr(A,B,Q,R);
+
+sys1 = ss(A-B*K,B,C,D);
+[y0,tOut,x0] = initial(sys0,xInit);
+[y1,tOut,x1] = initial(sys1,xInit,tOut);
+
+figure(1),clf
+subplot(4,1,1),hold on
+plot(tOut,y0)
+plot(tOut,y1)
+ylabel("Output y"),xlim([0,8]),legend("Open loop","Full State Feedback")
+title("LQR Solution for Q=I, R=1")
+subplot(4,1,2),hold on
+plot(tOut,x0(:,1))
+plot(tOut,x1(:,1))
+ylabel("State x[1]"),xlim([0,8]),legend("Open loop","Full State Feedback")
+subplot(4,1,3),hold on
+plot(tOut,x0(:,2))
+plot(tOut,x1(:,2))
+ylabel("State x[2]"),xlim([0,8]),legend("Open loop","Full State Feedback")
+subplot(4,1,4),hold on
+plot(tOut,x0(:,3))
+plot(tOut,x1(:,3))
+ylabel("State x[3]"),xlim([0,8]),legend("Open loop","Full State Feedback")
+ylim([0,10])
+xlabel("Time (s)")
+%% Q4 Part E
+Qs=[0.001, 1, 1000];
+Rs=[0.001, 1, 1000];
+figure(2),clf
+figure(3),clf
+figure(4),clf
+figure(5),clf
+for i=1:3
+    for j=1:3
+        Q=eye(3);
+        R=1;
+        
+        [K,S,P] = lqr(A,B,Q*Qs(i),R*Rs(j));
+        
+        sysn = ss(A-B*K,B,C,D);
+        [yn,tOut,xn] = initial(sysn,xInit,tOut);
+
+        fiure(2)
+        subplot(3,3,i*3-3+j)
+        plot(tOut,yn)
+        xlim([0,8])
+
+        fiure(3)
+        subplot(3,3,i*3-3+j)
+        plot(tOut,yn)
+        xlim([0,8])
+
+        fiure(2)
+        subplot(3,3,i*3-3+j)
+        plot(tOut,yn)
+        xlim([0,8])
+
+        fiure(2)
+        subplot(3,3,i*3-3+j)
+        plot(tOut,yn)
+        xlim([0,8])
+        % title(sprintf("Q=%f, R=%f",Qs(i),Rs(j)))
+    end
+end
+
+subplot(3,3,1), ylabel("Q=0.001")
+subplot(3,3,4), ylabel("Q=1")
+subplot(3,3,7), ylabel("Q=1000")
+
+subplot(3,3,7), xlabel("R=0.001")
+subplot(3,3,8), xlabel("R=1")
+subplot(3,3,9), xlabel("R=1000")
