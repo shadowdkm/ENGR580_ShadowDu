@@ -80,4 +80,6 @@ plot(tOut,xDry(:,3),"c")
 plot(tOut,xDry(:,4),"g"),legend("Vs_2","Vc_2")
 xlabel("Time (hour)")
 %% Handout #3
-% 1.1
+% 1.1 Controlable?
+rank([B A*B A*A*B A*A*A*B])
+disp("controllable")
