@@ -1,6 +1,6 @@
 close all
 duration=30;
-x0=randn(n,1).*[1,1,1,1,1,1,0.1,0.1,0,0]'*0.001; %Initial Condition
+x0=randn(n,1).*[1,1,1,1,1,1,0.1,0.1,0,0]'*0.1; %Initial Condition
 try
    out = sim('drone_5DOF.slx',duration);
 catch exception

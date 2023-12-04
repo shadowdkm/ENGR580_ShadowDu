@@ -1,5 +1,7 @@
-%% part A
+%% part A Handout 2
 clear all
+clc
+close all
 
 qr=0.00313889;
 qu=0.00627778;
@@ -68,7 +70,7 @@ xlabel("Time (hour)")
 xInit=[60000;90000;60000;90000];
 [yDry,tOut,xDry] = initial(system,xInit);
 figure(2),clf
-subplot(3,1,1), hold on
+subplot(3,1,1), hold on, title("Homogenous Response")
 plot(tOut,yDry,"b","linewidth",1),legend("Output")
 subplot(3,1,2), hold on
 plot(tOut,xDry(:,1),"c")
@@ -77,3 +79,5 @@ subplot(3,1,3), hold on
 plot(tOut,xDry(:,3),"c")
 plot(tOut,xDry(:,4),"g"),legend("Vs_2","Vc_2")
 xlabel("Time (hour)")
+%% Handout #3
+% 1.1
