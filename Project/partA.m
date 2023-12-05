@@ -83,3 +83,147 @@ xlabel("Time (hour)")
 % 1.1 Controlable?
 rank([B A*B A*A*B A*A*A*B])
 disp("controllable")
+
+% 1.2 Feedback Control
+tau=log(0.05)/20;  %exp(-48*tau)=0.05 , but this one is a little bit slow
+K = place(A,B,[tau tau*2 tau tau*2]);
+feedbackSystem=ss(A-B*K,B,C,D);
+t=1:100;
+fbxInit=xDry(30000,:);% when the land is dryed from full state for 300 hours
+fbxEqu=[60000;90000;60000;90000];
+fbu=K*fbxEqu*ones(1,100);
+[yFB,tFB,xFB] = lsim(feedbackSystem,fbu,t,fbxInit);
+% [yFB,tFB,xFB] = initial(feedbackSystem,xInit);
+figure(3), clf
+subplot(3,2,1), hold on, grid minor
+plot(tFB,xFB(:,1),"c")
+plot(tFB,tFB*0+60000*0.95,'k')
+plot(tFB,tFB*0+60000*1.05,'k'),legend("Vs_1","95%","105%"), xlabel("Time (h)")
+subplot(3,2,2), hold on, grid minor
+plot(tFB,xFB(:,2),"g")
+plot(tFB,tFB*0+90000*0.95,'k')
+plot(tFB,tFB*0+90000*1.05,'k'),legend("Vc_1","95%","105%"), xlabel("Time (h)")
+subplot(3,2,3), hold on, grid minor
+plot(tFB,xFB(:,3),"c")
+plot(tFB,tFB*0+60000*0.95,'k')
+plot(tFB,tFB*0+60000*1.05,'k'),legend("Vs_2","95%","105%"), xlabel("Time (h)")
+subplot(3,2,4), hold on, grid minor
+plot(tFB,xFB(:,4),"g")
+plot(tFB,tFB*0+90000*0.95,'k')
+plot(tFB,tFB*0+90000*1.05,'k'),legend("Vc_2","95%","105%"), xlabel("Time (h)")
+subplot(3,2,5:6), hold on, grid minor
+uTau20=-K*(xFB'-fbxEqu*ones(1,100));
+plot(tFB,uTau20(1,:)),
+plot(tFB,uTau20(2,:)),legend("Sprinkler 1","Sprinkler 2"), xlabel("Time (h)")
+
+% LQR
+Q=eye(4);
+R=1;
+[K_lqr,S,P] = lqr(A,B,Q,R);
+lqrSystem=ss(A-B*K_lqr,B,C,D);
+LQRu=K_lqr*fbxEqu*ones(1,100);
+[yLQR,tLQR,xLQR] = lsim(lqrSystem,LQRu,t,fbxInit);
+% [yLQR,tLQR,xLQR] = initial(feedbackSystem,xInit);
+figure(4), clf
+subplot(3,2,1), hold on, grid minor
+
+plot(tFB,xFB(:,1),"c"),plot(tLQR,xLQR(:,1),"r")
+
+legend("Vs_1 Tau=20","Vs_1 LQR"), xlabel("Time (h)")
+subplot(3,2,2), hold on, grid minor
+
+plot(tFB,xFB(:,2),"g"),plot(tLQR,xLQR(:,2),"r")
+
+legend("Vc_1 Tau=20","Vc_1 LQR"), xlabel("Time (h)")
+subplot(3,2,3), hold on, grid minor
+
+plot(tFB,xFB(:,3),"c"),plot(tLQR,xLQR(:,3),"r")
+legend("Vs_2 Tau=20","Vs_2 LQR"), xlabel("Time (h)")
+subplot(3,2,4), hold on, grid minor
+
+plot(tFB,xFB(:,4),"g"),plot(tLQR,xLQR(:,4),"r")
+legend("Vc_2 Tau=20","Vc_2 LQR"), xlabel("Time (h)")
+
+uLQR=-K*(xLQR'-fbxEqu*ones(1,100));
+
+subplot(3,2,5), hold on, grid minor
+
+plot(tLQR,uTau20(1,:)),plot(tLQR,uLQR(1,:))
+legend("Sprinkler 1 Tau=20","Sprinkler 1 LQR"), xlabel("Time (h)")
+subplot(3,2,6), hold on, grid minor
+
+plot(tLQR,uTau20(2,:)),plot(tLQR,uLQR(2,:))
+legend("Sprinkler 2 Tau=20","Sprinkler 2 LQR"), xlabel("Time (h)")
+
+%% 1.4 Broken Sprinkler 2
+Bbroken=[1,0;0,0;0,0;0,0];
+rank([Bbroken A*Bbroken A*A*Bbroken A*A*A*Bbroken])
+disp("uncontrollable")
+%but according to A and Bbroken, the system should be controllable.
+
+[Abar,Bbar,Cbar,T,k] = ctrbf(A,Bbroken,C);
+%Abar(1,1)<0 -> stablizable
+
+% 1.5 Simulation on springkle 2 broken
+feedbackSystem=ss(A-Bbroken*K,Bbroken,C,D);
+t=1:100;
+fbxInit=xDry(30000,:);% when the land is dryed from full state for 300 hours
+fbxEqu=[60000;90000;60000;90000];
+fbu=K*fbxEqu*ones(1,100);
+[yFB,tFB,xFB] = lsim(feedbackSystem,fbu,t,fbxInit);
+figure(5), clf
+subplot(3,2,1), hold on, grid minor
+plot(tFB,xFB(:,1),"c")
+plot(tFB,tFB*0+60000*0.95,'k')
+plot(tFB,tFB*0+60000*1.05,'k'),legend("Vs_1","95%","105%"), xlabel("Time (h)")
+subplot(3,2,2), hold on, grid minor
+plot(tFB,xFB(:,2),"g")
+plot(tFB,tFB*0+90000*0.95,'k')
+plot(tFB,tFB*0+90000*1.05,'k'),legend("Vc_1","95%","105%"), xlabel("Time (h)")
+subplot(3,2,3), hold on, grid minor
+plot(tFB,xFB(:,3),"c")
+plot(tFB,tFB*0+60000*0.95,'k')
+plot(tFB,tFB*0+60000*1.05,'k'),legend("Vs_2","95%","105%"), xlabel("Time (h)")
+subplot(3,2,4), hold on, grid minor
+plot(tFB,xFB(:,4),"g")
+plot(tFB,tFB*0+90000*0.95,'k')
+plot(tFB,tFB*0+90000*1.05,'k'),legend("Vc_2","95%","105%"), xlabel("Time (h)")
+subplot(3,2,5:6), hold on, grid minor
+uTau20=-K*(xFB'-fbxEqu*ones(1,100));
+plot(tFB,uTau20(1,:)),
+plot(tFB,uTau20(2,:)*0),legend("Sprinkler 1","Sprinkler 2"), xlabel("Time (h)")
+
+%% new controller
+tau=log(0.05)/20;  %exp(-48*tau)=0.05 , but this one is a little bit slow
+KBroken = K;
+feedbackBrokenSystem=ss(A-Bbroken*KBroken,Bbroken,C,D);
+t=1:100;
+fbxInit=xDry(30000,:);% when the land is dryed from full state for 300 hours
+fbxEqu=[60000;90000;60000;90000];
+FBrokenu=KBroken*fbxEqu*ones(1,100);
+[yFBroken,tFBroken,xFBroken] = lsim(feedbackBrokenSystem,FBrokenu,t,fbxInit);
+% [yFBroken,tFBroken,xFBroken] = initial(feedbackSystem,xInit);
+figure(6), clf
+subplot(3,2,1), hold on, grid minor
+plot(tFBroken,xFBroken(:,1),"c")
+plot(tFBroken,tFBroken*0+60000*0.95,'k')
+plot(tFBroken,tFBroken*0+60000*1.05,'k'),legend("Vs_1","95%","105%"), xlabel("Time (h)")
+subplot(3,2,2), hold on, grid minor
+plot(tFBroken,xFBroken(:,2),"g")
+plot(tFBroken,tFBroken*0+90000*0.95,'k')
+plot(tFBroken,tFBroken*0+90000*1.05,'k'),legend("Vc_1","95%","105%"), xlabel("Time (h)")
+subplot(3,2,3), hold on, grid minor
+plot(tFBroken,xFBroken(:,3),"c")
+plot(tFBroken,tFBroken*0+60000*0.95,'k')
+plot(tFBroken,tFBroken*0+60000*1.05,'k'),legend("Vs_2","95%","105%"), xlabel("Time (h)")
+subplot(3,2,4), hold on, grid minor
+plot(tFBroken,xFBroken(:,4),"g")
+plot(tFBroken,tFBroken*0+90000*0.95,'k')
+plot(tFBroken,tFBroken*0+90000*1.05,'k'),legend("Vc_2","95%","105%"), xlabel("Time (h)")
+subplot(3,2,5:6), hold on, grid minor
+uTau20=-K*(xFBroken'-FBrokenxEqu*ones(1,100));
+plot(tFBroken,uTau20(1,:)),
+plot(tFBroken,uTau20(2,:)),legend("Sprinkler 1","Sprinkler 2"), xlabel("Time (h)")
+
+disp("not able to make a controler works better, that will distroy the first land")
+

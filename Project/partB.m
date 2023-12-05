@@ -23,6 +23,8 @@ C(1,1)=1;
 C(2,2)=1;
 C(3,3)=1;
 
+D=zeros(3);
+
 Asym = sym(A);
 J = jordan(Asym);
 disp("Jordan Form:")
@@ -38,13 +40,9 @@ x(:,1) = x0;
 for i=1:floor(T_f/T_s)
     t(i)=(i-1)*T_s; %#ok %Time
     u(:,i)  = [0;0;0]; %#ok % Free response
-    %u(:,i) = sin(t(i)); % Forced Response
     x(:,i+1) = x(:,i) + T_s*(A*x(:,i) + B*u(:,i));
     y(:,i) = C*x(:,i); %#ok
 end
-% 
-% hold on
-% plot(t,y)
 
 %% 
 rank(ctrb(A,B))
@@ -66,19 +64,80 @@ for i=1:floor(T_f/T_s)
     y(:,i) = C*x(:,i); 
 end
 
-figure,
+figure(1),
 subplot(3,1,1)
-plot(t,x(1:3,2:end)')
+plot(t,x(1:3,2:end)'), title("Open loop Responce")
 legend("Position X","Position Y","Position Z")
 subplot(3,1,2)
 plot(t,x(4:6,2:end)')
 legend("Velocity X","Velocity Y","Velocity Z")
 subplot(3,1,3)
 plot(t,x(7:8,2:end)')
-legend("Phi","Theta")
-% 
-% figure
-% drone_Animation(x(1,:),x(2,:),x(3,:),x(7,:),x(8,:),x(1,:)*0);
-
-%% run simulation
-% plotSimulation
+legend("Phi","Theta"), xlabel("Time (s)")
+%% 3.2 Jordan form
+J = jordan(A);
+eig(A)
+% 3.5 BIBO
+droneSys=ss(A,B,C,D);
+tf(droneSys)
+disp("Zero poles, not BIBO stable")
+%% 3.7 Homogenous Response
+stepVal=[0,0,0];
+duration=10;
+x0=randn(n,1).*[1,1,1,1,1,1,0.1,0.1,0,0]'*1; %Initial Condition
+try
+   out = sim('drone_5DOF.slx',duration);
+catch exception
+   disp(exception)
+   return
+end
+figure(5)
+plotDroneSimulationResult(out)
+xlabel("Time (t) Homogenous Response")
+%% 3.8.1 Step Response: Step in Pulling Force
+stepVal=[1,0,0];
+duration=10;
+x0=zeros(10,1); %Initial Condition
+try
+   out = sim('drone_5DOF.slx',duration);
+catch exception
+   disp(exception)
+   return
+end
+figure(6)
+plotDroneSimulationResult(out)
+xlabel("Time (t) Step in Pulling Force")
+%% 3.8.2 Step Response: Step in TauX
+stepVal=[0,1,0];
+duration=10;
+x0=zeros(10,1); %Initial Condition
+try
+   out = sim('drone_5DOF.slx',duration);
+catch exception
+   disp(exception)
+   return
+end
+figure(7)
+plotDroneSimulationResult(out)
+xlabel("Time (t) Step in Tau_X")
+%% 3.8.3 Step Response: Step in TauY
+stepVal=[0,0,1];
+duration=10;
+x0=zeros(10,1); %Initial Condition
+try
+   out = sim('drone_5DOF.slx',duration);
+catch exception
+   disp(exception)
+   return
+end
+figure(8)
+plotDroneSimulationResult(out)
+xlabel("Time (t) Step in Tau_Y")
+%% 2.1 Controlable
+% 2.3 
+Bbroken=B; Bbroken(10,3)=0;
+rank(ctrb(A,Bbroken))
+% [T,Abar,Bbar,Cbar] = Kalman_Decomposition(A,Bbroken,C);
+[Abar,Bbar,Cbar,T,k] = ctrbf(A,Bbroken,C);
+A_uncontrolable=Abar(1:4,1:4);
+eig(A_uncontrolable) %=> all zero, stablizable
