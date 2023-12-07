@@ -48,7 +48,7 @@ end
 rank(ctrb(A,B))
 rank(obsv(A,C))
 Q=eye(n);
-R=1*100;
+R=0.0001;
 
 [K,S,P] = lqr(A,B,Q,R);
               % x   y   z   vx  vy  vz  phi  theta  phidot thetadot
