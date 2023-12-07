@@ -18,12 +18,15 @@ B(6,1)=-1/mass;
 B(9,2)=1/I;
 B(10,3)=1/I;
 
-C=zeros(3,10);
-C(1,1)=1;
-C(2,2)=1;
-C(3,3)=1;
+C=zeros(6,10);
+C(1,9)=1;    % gyroscope
+C(2,10)=1;   % gyroscope
+C(3,3)=1;    % barometer
+C(4,4)=1;    % integrated x acc
+C(5,5)=1;    % integrated y acc
+% C(6,6)=1;
 
-D=zeros(3);
+D=zeros(size(C,1));
 
 Asym = sym(A);
 J = jordan(Asym);

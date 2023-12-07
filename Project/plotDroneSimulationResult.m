@@ -16,7 +16,7 @@ plot(out.simuT,out.simuRealStates(:,2))
 ylabel("y position"),grid minor
 
 subplot(5,3,3), hold on
-plot(out.simuT,out.simuLinearStates(:,3),'.')
+plot(out.simuT,out.simuLinearStates(:,3))
 plot(out.simuT,out.simuRealStates(:,3))
 % legend("Linear","Real")
 ylabel("z position"),grid minor
@@ -35,7 +35,7 @@ plot(out.simuT,out.simuRealStates(:,5))
 ylabel("y velocity"),grid minor
 
 subplot(5,3,6), hold on
-plot(out.simuT,out.simuLinearStates(:,6),'.')
+plot(out.simuT,out.simuLinearStates(:,6))
 plot(out.simuT,out.simuRealStates(:,6))
 % legend("Linear","Real")
 ylabel("z velocity"),grid minor
