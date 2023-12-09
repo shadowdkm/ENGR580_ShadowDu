@@ -1,4 +1,4 @@
-function [T,Abar,Bbar,Cbar]=Kalman_Decomposition(A,B,C) 
+function [T,Abar,Bbar,Cbar]=Kalman_Decomposition(A,B,C) %https://www.mathworks.com/matlabcentral/fileexchange/119153-kalman-decomposition?s_tid=FX_rc1_behav
     [n1,n2]=size(A);
     [n3,m]=size(B);
     [p,n4]=size(C);
@@ -27,7 +27,8 @@ function [T,Abar,Bbar,Cbar]=Kalman_Decomposition(A,B,C)
         UaU=intsection_of(US,ONCbU); % To find the basis of Uncontrollable and Unobservable Matrix
         U=[CbU CaO UaU]; % Concatenating Matrix of basis of Controllable but Unobservable Matrix, Controllable & Observable Matrix and Uncontrollable & Unobservable Matrix
         UbO=null(U'); % taking null space of transpose of union matrix to find Uncontrollable but Observable Matrix
-        T=[CbU CaO UaU UbO]; % Concatenation of all 4 basis vectors to find the transformation matrix
+        % T=[CbU CaO UaU UbO]; % Concatenation of all 4 basis vectors to find the transformation matrix
+        T=[CaO CbU UbO UaU]; % Revised based on 580 lecture notes
         Abar = T\A*T; % To find the Modified State Matrix (inverse(T)*A*T)
         Bbar = T\B; % To find the Modified Input Matrix (inverse(T)*B)
         Cbar = C*T; % To find the Modified Output Matrix

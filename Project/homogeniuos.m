@@ -51,3 +51,16 @@ end
 figure(8)
 plotDroneSimulationResult(out)
 xlabel("Time (t) Step in Tau_Y")
+%% Homogenous Response with Observer
+stepVal=[0,0,0];
+duration=3;
+x0=randn(n,1).*[1,1,1,1,1,1,0.1,0.1,0,0]'*0.1; %Initial Condition
+try
+   out = sim('drone_5DOF.slx',duration);
+catch exception
+   disp(exception)
+   return
+end
+figure(5)
+plotDroneObserverResult(out)
+xlabel("Time (t) Homogenous Response")
