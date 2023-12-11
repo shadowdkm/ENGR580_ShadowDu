@@ -177,12 +177,15 @@ catch exception
    return
 end
 
-figure(9)
+figure(9),clf
 plotDroneObserverResult(out)
 %% Tracking 
-beta=-10;
+beta=-50;
 Ki=zeros(3,7);
 Ki(1,3)=beta;
+
+Kp=zeros(3,7);
+Kp(1,3)=-1000;
 
 try
    out = sim('drone_5DOF_observer.slx',duration);
@@ -190,5 +193,5 @@ catch exception
    disp(exception)
    return
 end
-figure(10)
+figure(10),clf
 plotDroneObserverResult(out)
