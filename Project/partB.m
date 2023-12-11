@@ -18,13 +18,13 @@ B(6,1)=-1/mass;
 B(9,2)=1/I;
 B(10,3)=1/I;
 
-C=zeros(9,10);
+C=zeros(7,10);
 C(1,9)=1;       % gyroscope
 C(2,10)=1;      % gyroscope
 C(3,3)=1;       % barometer
 C(4,4)=1;       % integrated x acc
 C(5,5)=1;       % integrated y acc
-% C(6,6)=1;       % integrated z acc, not reliable
+% C(?,6)=1;       % integrated z acc, not reliable
 
 
 D=zeros(size(C,1),size(B,2));
@@ -158,13 +158,13 @@ Cob=C;
 % C(3,3)=1;       % barometer
 % C(4,4)=1;       % integrated x acc
 % C(5,5)=1;       % integrated y acc
-Cob(7,1)=1;       % GPS x postion
-Cob(8,2)=1;       % GPS y postion
-Cob(9,3)=1;       % GPS z postion
+Cob(6,1)=1;       % GPS x postion
+Cob(7,2)=1;       % GPS y postion
 rank(obsv(A,Cob))
+Ki=zeros(3,7);    % no tracking gain
 
 Q_duo=eye(n);
-R_duo=0.001;
+R_duo=0.0001;
 [K_duo,S_duo,P_duo] = lqr(A',Cob',Q_duo,R_duo);
 L=K_duo';
 x0=randn(n,1).*[1,1,1,1,1,1,0.1,0.1,0,0]'*1; %Initial Condition
@@ -177,8 +177,18 @@ catch exception
    return
 end
 
+figure(9)
 plotDroneObserverResult(out)
+%% Tracking 
+beta=-10;
+Ki=zeros(3,7);
+Ki(1,3)=beta;
 
-steadyStateGain = dcgain(ss(A-B*K,B,Cob,D));
-steadyStateGainInverse=steadyStateGain'*0;
-
+try
+   out = sim('drone_5DOF_observer.slx',duration);
+catch exception
+   disp(exception)
+   return
+end
+figure(10)
+plotDroneObserverResult(out)
