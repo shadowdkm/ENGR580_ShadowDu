@@ -72,30 +72,33 @@ plot(out.simuT,out.simuReal2bEstOutput(:,3))
 plot(out.simuT,out.simuTargetZ,'k','LineWidth',1)
 legend("Real","Target")
 ylabel("Z Position"),grid minor
+xlabel("Time (s)")
 
 subplot(5,3,14), hold on
 plot(out.simuT,out.simuReal2bEstOutput(:,6))
 plot(out.simuT,-out.simuTargetX,'k','LineWidth',1)
 % legend("Real","Target")
 ylabel("X Position"),grid minor
+xlabel("Time (s)")
 
 subplot(5,3,15), hold on
 plot(out.simuT,out.simuReal2bEstOutput(:,7))
 plot(out.simuT,-out.simuTargetY,'k','LineWidth',1)
 % legend("Real","Target")
 ylabel("Y Position"),grid minor
+xlabel("Time (s)")
 
 %%
-subplot(5,3,9), hold on
+% subplot(5,3,9), hold on
 % plot(out.simuT,out.simuRealU(:,2))
 % plot(out.simuT,out.simuLinearU(:,2))
 % legend("Linear","Real")
-ylabel("Tau_x"),grid minor
+% ylabel("Tau_x"),grid minor
 
-subplot(5,3,12), hold on
+% subplot(5,3,12), hold on
 % plot(out.simuT,out.simuRealU(:,3))
 % plot(out.simuT,out.simuLinearU(:,3))
 % legend("Linear","Real")
-ylabel("Tau_y"),grid minor
+% ylabel("Tau_y"),grid minor
 
 end

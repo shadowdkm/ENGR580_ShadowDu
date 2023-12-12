@@ -52,7 +52,7 @@ end
 rank(ctrb(A,B))
 rank(obsv(A,C))
 Q=eye(n);
-R=0.0001;
+R=0.001;
 
 [K,S,P] = lqr(A,B,Q,R);
               % x   y   z   vx  vy  vz  phi  theta  phidot thetadot
@@ -203,7 +203,6 @@ catch exception
 end
 figure(10),clf
 plotDroneObserverResult(out)
-xlabel("Time (t) Output Feedback Tracking")
 %% Tracking with Disturbance of wind on x axis
 beta=-100;
 Ki=zeros(3,7);
@@ -227,7 +226,6 @@ catch exception
 end
 figure(11),clf
 plotDroneObserverResult(out)
-xlabel("Time (t) Output Feedback Disturbance of wind on x axis")
 %% Tracking with Disturbance of wind on x rotation
 beta=-100;
 Ki=zeros(3,7);
@@ -251,7 +249,6 @@ catch exception
 end
 figure(12),clf
 plotDroneObserverResult(out)
-xlabel("Time (t) Output Feedback Disturbance of wind on x rotation")
 %% Tracking a route with Disturbance of wind on z axis
 beta=-100;
 Ki=zeros(3,7);
@@ -275,7 +272,6 @@ catch exception
 end
 figure(13),clf
 plotDroneObserverResult(out)
-xlabel("Time (t) Output Feedback Disturbance of wind on z axis")
 %% Regularization with Measurement Noise
 TrackingEnabled=1;
 
@@ -301,7 +297,6 @@ catch exception
 end
 figure(14),clf
 plotDroneObserverResult(out)
-xlabel("Time (t) Output Feedback Measurement Noise")
 %% Tracking a route with Measurement Noise
 TrackingEnabled=1;
 try
@@ -312,9 +307,13 @@ catch exception
 end
 figure(15),clf,plotDroneObserverResult(out)
 figure(16),clf
-plot3(-out.simuTargetX,-out.simuTargetY,out.simuTargetZ), hold on
+plot3(-out.simuTargetX,-out.simuTargetY,out.simuTargetZ,'k'), hold on
 simuReal2bEstOutput=reshape(out.simuReal2bEstOutput,7,[])';
 plot3(simuReal2bEstOutput(:,6),simuReal2bEstOutput(:,7),simuReal2bEstOutput(:,3)), hold off
+legend("Target Route","Tracking Result")
+xlabel("x (m)")
+ylabel("y (m)")
+zlabel("z (m)")
 axis equal
 grid minor
 
