@@ -2,6 +2,7 @@ function plotDroneObserverResult(out)
 
 out.simuReal2bEstStates=reshape(out.simuReal2bEstStates,10,[])';
 out.simuEstStates=reshape(out.simuEstStates,10,[])';
+out.simuReal2bEstOutput=reshape(out.simuReal2bEstOutput,7,[])';
 % out.simuRealU=reshape(out.simuRealU,3,[])';
 %% postion
 subplot(5,3,1), hold on
@@ -65,13 +66,26 @@ plot(out.simuT,out.simuEstStates(:,10))
 plot(out.simuT,out.simuReal2bEstStates(:,10))
 % legend("Linear","Real")
 ylabel("y angular velocity"),grid minor
-%% control signals
-subplot(5,3,13:15), hold on
-% plot(out.simuT,out.simuRealU(:,1))
-% plot(out.simuT,out.simuLinearU(:,1))
-legend("Linear","Real")
-ylabel("Fm"),grid minor
+%% Tracking 
+subplot(5,3,13), hold on
+plot(out.simuT,out.simuReal2bEstOutput(:,3))
+plot(out.simuT,out.simuTargetZ,'k','LineWidth',1)
+legend("Real","Target")
+ylabel("Z Position"),grid minor
 
+subplot(5,3,14), hold on
+plot(out.simuT,out.simuReal2bEstOutput(:,6))
+plot(out.simuT,-out.simuTargetX,'k','LineWidth',1)
+% legend("Real","Target")
+ylabel("X Position"),grid minor
+
+subplot(5,3,15), hold on
+plot(out.simuT,out.simuReal2bEstOutput(:,7))
+plot(out.simuT,-out.simuTargetY,'k','LineWidth',1)
+% legend("Real","Target")
+ylabel("Y Position"),grid minor
+
+%%
 subplot(5,3,9), hold on
 % plot(out.simuT,out.simuRealU(:,2))
 % plot(out.simuT,out.simuLinearU(:,2))
@@ -84,5 +98,4 @@ subplot(5,3,12), hold on
 % legend("Linear","Real")
 ylabel("Tau_y"),grid minor
 
-subplot(5,3,13:15)
 end

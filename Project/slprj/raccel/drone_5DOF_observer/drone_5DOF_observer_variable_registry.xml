@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MF0 version="1.1" packageUris="http://schema.mathworks.com/mf0/slsa_mm_parameter_tuning/R2021b">
+  <slsa.mm.parametertuning.VariableRegistry type="slsa.mm.parametertuning.VariableRegistry" uuid="611c4f32-b853-43d4-a645-8b735d38556c">
+    <blockParameters type="slsa.mm.parametertuning.BlockParameter" uuid="2087fb43-6134-487a-a25b-5e7ed7564206">
+      <blockPath>drone_5DOF_observer/Constant2</blockPath>
+      <parameterName>Value</parameterName>
+      <expression type="slsa.mm.parametertuning.Expression" uuid="24875f9a-3657-4101-950a-e8982eb5f63c"/>
+      <valueAttributes type="slsa.mm.parametertuning.ValueAttributes" uuid="ef70cb97-6569-401e-b5fb-d9338d5e6dea">
+        <className>double</className>
+        <dimensions>3</dimensions>
+        <dimensions>1</dimensions>
+      </valueAttributes>
+    </blockParameters>
+    <defaultValueCachePath>C:\Users\Shadow\Documents\ENGR580\Project\slprj\raccel\drone_5DOF_observer\drone_5DOF_observer_default_variable_values.mat</defaultValueCachePath>
+    <expressions type="slsa.mm.parametertuning.Expression" uuid="24875f9a-3657-4101-950a-e8982eb5f63c">
+      <expression>[-mass*g;0;0]</expression>
+      <users type="slsa.mm.parametertuning.BlockParameter" uuid="2087fb43-6134-487a-a25b-5e7ed7564206"/>
+      <variables type="slsa.mm.parametertuning.Variable" uuid="89fd52d1-a1c9-453c-9e49-64dd08de27e7"/>
+      <variables type="slsa.mm.parametertuning.Variable" uuid="a27f44f7-a3b4-419a-94f3-f556719b4ad0"/>
+    </expressions>
+    <name>drone_5DOF_observer</name>
+    <variables type="slsa.mm.parametertuning.Variable" uuid="f31169ae-b92a-4129-be4c-22901a3f6bbe">
+      <name>A</name>
+      <workspace type="slsa.mm.parametertuning.Workspace" uuid="cd6dae23-1ebe-4600-a244-1ce6f6ba8cd5"/>
+    </variables>
+    <variables type="slsa.mm.parametertuning.Variable" uuid="8cab0610-121f-4a00-9ac8-9f1023071241">
+      <name>Kp</name>
+      <workspace type="slsa.mm.parametertuning.Workspace" uuid="cd6dae23-1ebe-4600-a244-1ce6f6ba8cd5"/>
+    </variables>
+    <variables type="slsa.mm.parametertuning.Variable" uuid="047afcbe-d32d-42c9-a235-7c8db6ca9f24">
+      <name>B</name>
+      <workspace type="slsa.mm.parametertuning.Workspace" uuid="cd6dae23-1ebe-4600-a244-1ce6f6ba8cd5"/>
+    </variables>
+    <variables type="slsa.mm.parametertuning.Variable" uuid="c622b0a1-bb1d-4108-8f32-c009df463247">
+      <name>Cob</name>
+      <workspace type="slsa.mm.parametertuning.Workspace" uuid="cd6dae23-1ebe-4600-a244-1ce6f6ba8cd5"/>
+    </variables>
+    <variables type="slsa.mm.parametertuning.Variable" uuid="a8593066-c20a-4322-927e-c4dadbf111df">
+      <name>ObservedVariance</name>
+      <workspace type="slsa.mm.parametertuning.Workspace" uuid="cd6dae23-1ebe-4600-a244-1ce6f6ba8cd5"/>
+    </variables>
+    <variables type="slsa.mm.parametertuning.Variable" uuid="28bc24c2-e8a6-484c-b47a-bcf79842a32d">
+      <name>L</name>
+      <workspace type="slsa.mm.parametertuning.Workspace" uuid="cd6dae23-1ebe-4600-a244-1ce6f6ba8cd5"/>
+    </variables>
+    <variables type="slsa.mm.parametertuning.Variable" uuid="10862dd8-7b3e-4c8f-8d8e-94122b77dcd3">
+      <name>DisturbanceVariance</name>
+      <workspace type="slsa.mm.parametertuning.Workspace" uuid="cd6dae23-1ebe-4600-a244-1ce6f6ba8cd5"/>
+    </variables>
+    <variables type="slsa.mm.parametertuning.Variable" uuid="31e94c37-f8f9-4f54-8654-24e98661d566">
+      <name>K</name>
+      <workspace type="slsa.mm.parametertuning.Workspace" uuid="cd6dae23-1ebe-4600-a244-1ce6f6ba8cd5"/>
+    </variables>
+    <variables type="slsa.mm.parametertuning.Variable" uuid="02a8b2ef-2e34-46a7-a645-630a1cf785de">
+      <name>Ki</name>
+      <workspace type="slsa.mm.parametertuning.Workspace" uuid="cd6dae23-1ebe-4600-a244-1ce6f6ba8cd5"/>
+    </variables>
+    <variables type="slsa.mm.parametertuning.Variable" uuid="758df534-e5e7-4d55-bb18-050fc30b73be">
+      <name>TrackingEnabled</name>
+      <workspace type="slsa.mm.parametertuning.Workspace" uuid="cd6dae23-1ebe-4600-a244-1ce6f6ba8cd5"/>
+    </variables>
+    <variables type="slsa.mm.parametertuning.Variable" uuid="7c4d7757-b991-43eb-8779-515dfd29fb15">
+      <name>x0</name>
+      <workspace type="slsa.mm.parametertuning.Workspace" uuid="cd6dae23-1ebe-4600-a244-1ce6f6ba8cd5"/>
+    </variables>
+    <variables type="slsa.mm.parametertuning.Variable" uuid="89fd52d1-a1c9-453c-9e49-64dd08de27e7">
+      <expressions type="slsa.mm.parametertuning.Expression" uuid="24875f9a-3657-4101-950a-e8982eb5f63c"/>
+      <name>g</name>
+      <workspace type="slsa.mm.parametertuning.Workspace" uuid="cd6dae23-1ebe-4600-a244-1ce6f6ba8cd5"/>
+    </variables>
+    <variables type="slsa.mm.parametertuning.Variable" uuid="a27f44f7-a3b4-419a-94f3-f556719b4ad0">
+      <expressions type="slsa.mm.parametertuning.Expression" uuid="24875f9a-3657-4101-950a-e8982eb5f63c"/>
+      <name>mass</name>
+      <workspace type="slsa.mm.parametertuning.Workspace" uuid="cd6dae23-1ebe-4600-a244-1ce6f6ba8cd5"/>
+    </variables>
+    <workspaces type="slsa.mm.parametertuning.Workspace" uuid="cd6dae23-1ebe-4600-a244-1ce6f6ba8cd5">
+      <name>global-workspace</name>
+      <variables type="slsa.mm.parametertuning.Variable" uuid="f31169ae-b92a-4129-be4c-22901a3f6bbe"/>
+      <variables type="slsa.mm.parametertuning.Variable" uuid="8cab0610-121f-4a00-9ac8-9f1023071241"/>
+      <variables type="slsa.mm.parametertuning.Variable" uuid="047afcbe-d32d-42c9-a235-7c8db6ca9f24"/>
+      <variables type="slsa.mm.parametertuning.Variable" uuid="c622b0a1-bb1d-4108-8f32-c009df463247"/>
+      <variables type="slsa.mm.parametertuning.Variable" uuid="a8593066-c20a-4322-927e-c4dadbf111df"/>
+      <variables type="slsa.mm.parametertuning.Variable" uuid="28bc24c2-e8a6-484c-b47a-bcf79842a32d"/>
+      <variables type="slsa.mm.parametertuning.Variable" uuid="10862dd8-7b3e-4c8f-8d8e-94122b77dcd3"/>
+      <variables type="slsa.mm.parametertuning.Variable" uuid="31e94c37-f8f9-4f54-8654-24e98661d566"/>
+      <variables type="slsa.mm.parametertuning.Variable" uuid="02a8b2ef-2e34-46a7-a645-630a1cf785de"/>
+      <variables type="slsa.mm.parametertuning.Variable" uuid="758df534-e5e7-4d55-bb18-050fc30b73be"/>
+      <variables type="slsa.mm.parametertuning.Variable" uuid="7c4d7757-b991-43eb-8779-515dfd29fb15"/>
+      <variables type="slsa.mm.parametertuning.Variable" uuid="89fd52d1-a1c9-453c-9e49-64dd08de27e7"/>
+      <variables type="slsa.mm.parametertuning.Variable" uuid="a27f44f7-a3b4-419a-94f3-f556719b4ad0"/>
+    </workspaces>
+  </slsa.mm.parametertuning.VariableRegistry>
+</MF0>
