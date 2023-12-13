@@ -34,6 +34,7 @@ J = jordan(Asym);
 disp("Jordan Form:")
 disp(double(J))
 
+stateNoiseGain=zeros(10,1);
 %% Simulation Loop
 
 T_f=5;T_s=0.01; % Final Time and sampling rate
@@ -51,6 +52,61 @@ end
 %% 
 rank(ctrb(A,B))
 rank(obsv(A,C))
+
+%% 3.7 Homogenous Response Openloop
+stepVal=[0,0,0];
+K=zeros(3,10);
+duration=10;
+x0=randn(n,1).*[1,1,1,1,1,1,0.1,0.1,0,0]'*0.1; %Initial Condition
+try
+   out = sim('drone_5DOF.slx',duration);
+catch exception
+   disp(exception)
+   return
+end
+figure(4)
+plotDroneSimulationResult(out)
+xlabel("Time (t) Homogenous Response")
+%% 3.8.1 Step Response: Step in Pulling Force Openloop
+stepVal=[1,0,0];
+duration=10;
+x0=zeros(10,1); %Initial Condition
+try
+   out = sim('drone_5DOF.slx',duration);
+catch exception
+   disp(exception)
+   return
+end
+figure(6)
+plotDroneSimulationResult(out)
+xlabel("Time (t) Step in Pulling Force Openloop")
+%% 3.8.2 Step Response: Step in TauX Openloop
+stepVal=[0,1,0];
+duration=10;
+x0=zeros(10,1); %Initial Condition
+try
+   out = sim('drone_5DOF.slx',duration);
+catch exception
+   disp(exception)
+   return
+end
+figure(7)
+plotDroneSimulationResult(out)
+xlabel("Time (t) Step in Tau_X Openloop")
+%% 3.8.3 Step Response: Step in TauY Openloop
+stepVal=[0,0,1];
+duration=10;
+x0=zeros(10,1); %Initial Condition
+try
+   out = sim('drone_5DOF.slx',duration);
+catch exception
+   disp(exception)
+   return
+end
+figure(8)
+plotDroneSimulationResult(out)
+xlabel("Time (t) Step in Tau_Y Openloop")
+%% 3.7 Controller Design
 Q=eye(n);
 R=0.0001;
 
@@ -58,26 +114,6 @@ R=0.0001;
               % x   y   z   vx  vy  vz  phi  theta  phidot thetadot
 % K = place(A,B,[-11 -12 -100 -5 -6  -20  -10   -10     -5     -5]);
 
-% x(:,1) = [0.001,0,0,0,0,0,0,0,0,0];
-x(:,1) =randn(n,1);
-
-for i=1:floor(T_f/T_s)
-    t(i)=(i-1)*T_s; %Time
-    u(:,i) = [mass*g;0;0]-K*x(:,i);
-    x(:,i+1) = x(:,i) + T_s*(A*x(:,i) + B*u(:,i));
-    y(:,i) = C*x(:,i); 
-end
-
-figure(1),
-subplot(3,1,1)
-plot(t,x(1:3,2:end)'), title("Open loop Responce")
-legend("Position X","Position Y","Position Z")
-subplot(3,1,2)
-plot(t,x(4:6,2:end)')
-legend("Velocity X","Velocity Y","Velocity Z")
-subplot(3,1,3)
-plot(t,x(7:8,2:end)')
-legend("Phi","Theta"), xlabel("Time (s)")
 %% 3.2 Jordan form
 J = jordan(A);
 eig(A)
@@ -98,6 +134,35 @@ end
 figure(5)
 plotDroneSimulationResult(out)
 xlabel("Time (t) Homogenous Response")
+
+x0=x0*5;
+try
+   out = sim('drone_5DOF.slx',duration);
+catch exception
+   disp(exception)
+   return
+end
+figure(6)
+plotDroneSimulationResult(out)
+xlabel("Time (t) Homogenous Response")
+%% 3.7 Homogenous Response with noise
+stateNoiseGain(1:3)=0.1; %assume the positon is measured by camera systems, the error is small
+stateNoiseGain(4:6)=0.1; %assume the calculated from postion, the error is small
+stateNoiseGain(7:8)=5/180*pi; %assume the angle is measured by camera systems, the error is small, let it be 5 degree
+stateNoiseGain(9:10)=5/180*pi; %let it be 5 degree
+stepVal=[0,0,0];
+duration=10;
+x0=randn(n,1).*[1,1,0,1,1,1,0.1,0.1,0,0]'*1; %Initial Condition
+try
+   out = sim('drone_5DOF.slx',duration);
+catch exception
+   disp(exception)
+   return
+end
+figure(5)
+plotDroneSimulationResult(out)
+xlabel("Time (t) Homogenous Response with noise")
+
 %% 3.8.1 Step Response: Step in Pulling Force
 stepVal=[1,0,0];
 duration=10;
@@ -137,12 +202,12 @@ end
 figure(8)
 plotDroneSimulationResult(out)
 xlabel("Time (t) Step in Tau_Y")
-%% 2.1 Controlable
+%% 2.1 Controllable
 % 2.3 
 Bbroken=B; Bbroken(10,3)=0;
 rank(ctrb(A,Bbroken))
 % [T,Abar,Bbar,Cbar] = Kalman_Decomposition(A,Bbroken,C);
-[Abar,Bbar,Cbar,T,k] = ctrbf(A,Bbroken,C);
+[T,Abar,Bbar,Cbar] = Kalman_Decomposition(A,Bbroken,C);
 A_uncontrolable=Abar(1:4,1:4);
 eig(A_uncontrolable) %=> all zero, stablizable
 
@@ -203,7 +268,6 @@ catch exception
 end
 figure(10),clf
 plotDroneObserverResult(out)
-xlabel("Time (t) Output Feedback Tracking")
 %% Tracking with Disturbance of wind on x axis
 beta=-100;
 Ki=zeros(3,7);
@@ -227,7 +291,6 @@ catch exception
 end
 figure(11),clf
 plotDroneObserverResult(out)
-xlabel("Time (t) Output Feedback Disturbance of wind on x axis")
 %% Tracking with Disturbance of wind on x rotation
 beta=-100;
 Ki=zeros(3,7);
@@ -249,9 +312,8 @@ catch exception
    disp(exception)
    return
 end
-figure(11),clf
+figure(12),clf
 plotDroneObserverResult(out)
-xlabel("Time (t) Output Feedback Disturbance of wind on x rotation")
 %% Tracking a route with Disturbance of wind on z axis
 beta=-100;
 Ki=zeros(3,7);
@@ -273,11 +335,10 @@ catch exception
    disp(exception)
    return
 end
-figure(11),clf
+figure(13),clf
 plotDroneObserverResult(out)
-xlabel("Time (t) Output Feedback Disturbance of wind on z axis")
 %% Regularization with Measurement Noise
-TrackingEnabled=0;
+TrackingEnabled=1;
 
 beta=-100;
 Ki=zeros(3,7);
@@ -299,20 +360,25 @@ catch exception
    disp(exception)
    return
 end
-figure(12),clf
+figure(14),clf
 plotDroneObserverResult(out)
-xlabel("Time (t) Output Feedback Measurement Noise")
 %% Tracking a route with Measurement Noise
 TrackingEnabled=1;
 try
-   out = sim('drone_5DOF_observer.slx',20);
+   out = sim('drone_5DOF_observer.slx',30);
 catch exception
    disp(exception)
    return
 end
-figure(13),clf,plotDroneObserverResult(out)
-figure(14),clf
-plot3(-out.simuTargetX,-out.simuTargetY,out.simuTargetZ), hold on
+figure(15),clf,plotDroneObserverResult(out)
+figure(16),clf
+plot3(-out.simuTargetX,-out.simuTargetY,out.simuTargetZ,'k'), hold on
 simuReal2bEstOutput=reshape(out.simuReal2bEstOutput,7,[])';
 plot3(simuReal2bEstOutput(:,6),simuReal2bEstOutput(:,7),simuReal2bEstOutput(:,3)), hold off
+legend("Target Route","Tracking Result")
+xlabel("x (m)")
+ylabel("y (m)")
+zlabel("z (m)")
+axis equal
+grid minor
 

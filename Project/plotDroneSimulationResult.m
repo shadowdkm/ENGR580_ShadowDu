@@ -1,5 +1,5 @@
 function plotDroneSimulationResult(out)
-
+clf
 out.simuRealStates=reshape(out.simuRealStates,10,[])';
 out.simuRealU=reshape(out.simuRealU,3,[])';
 %% postion

@@ -21,7 +21,7 @@ disp("Eigen Values:")
 disp(V)
 
 Asym = sym(A);
-J = jordan(Asym);
+[V,J] = jordan(Asym);
 disp("Jordan Form:")
 disp(double(J))
 
@@ -226,4 +226,7 @@ plot(tFBroken,uTau20(1,:)),
 plot(tFBroken,uTau20(2,:)),legend("Sprinkler 1","Sprinkler 2"), xlabel("Time (h)")
 
 disp("not able to make a controler works better, that will distroy the first land")
+%% Observability
+rank([C;C*A;C*A*A;C*A*A*A])
 
+[Tkd,Akd,Bkd,Ckd]=Kalman_Decomposition(A,B,C);

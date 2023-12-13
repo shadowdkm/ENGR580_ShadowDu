@@ -8,7 +8,7 @@ out.simuReal2bEstOutput=reshape(out.simuReal2bEstOutput,7,[])';
 subplot(5,3,1), hold on
 plot(out.simuT,out.simuEstStates(:,1))
 plot(out.simuT,out.simuReal2bEstStates(:,1))
-legend("Estimated","Real")
+
 ylabel("x position"),grid minor
 
 subplot(5,3,2), hold on
@@ -20,7 +20,7 @@ ylabel("y position"),grid minor
 subplot(5,3,3), hold on
 plot(out.simuT,out.simuEstStates(:,3))
 plot(out.simuT,out.simuReal2bEstStates(:,3))
-% legend("Linear","Real")
+legend("Linear","Real")
 ylabel("z position"),grid minor
 
 %% velocity
