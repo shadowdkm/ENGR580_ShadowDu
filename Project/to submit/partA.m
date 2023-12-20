@@ -221,7 +221,7 @@ plot(tFBroken,xFBroken(:,4),"g")
 plot(tFBroken,tFBroken*0+90000*0.95,'k')
 plot(tFBroken,tFBroken*0+90000*1.05,'k'),legend("Vc_2","95%","105%"), xlabel("Time (h)")
 subplot(3,2,5:6), hold on, grid minor
-uTau20=-K*(xFBroken'-FBrokenxEqu*ones(1,100));
+uTau20=-K*(xFBroken'-fbxEqu*ones(1,100));
 plot(tFBroken,uTau20(1,:)),
 plot(tFBroken,uTau20(2,:)),legend("Sprinkler 1","Sprinkler 2"), xlabel("Time (h)")
 

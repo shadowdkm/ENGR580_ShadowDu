@@ -347,11 +347,11 @@ Ki(1,3)=beta;
 Kp=zeros(3,7);
 Kp(1,3)=-3000;
 DisturbanceVariance=zeros(10,1);
-ObservedVariance(1)=0.005/180*pi/10; % Gyroscope of MPU6050, from spec
-ObservedVariance(2)=0.005/180*pi/10; % Gyroscope of MPU6050, from spec
+ObservedVariance(1)=0.005/180*pi*10; % Gyroscope of MPU6050, from spec
+ObservedVariance(2)=0.005/180*pi*10; % Gyroscope of MPU6050, from spec
 ObservedVariance(3)=1.1/sqrt(2);     % Barometer SPL-001, from spec
-ObservedVariance(4)=0.04*9.8/10;     % Accelerometer of MPU6050, from spec
-ObservedVariance(5)=0.04*9.8/10;     % Accelerometer of MPU6050, from spec
+ObservedVariance(4)=0.04*9.8*10;     % Accelerometer of MPU6050, from spec
+ObservedVariance(5)=0.04*9.8*10;     % Accelerometer of MPU6050, from spec
 ObservedVariance(6)=3.9;             % GPS x, hand measured
 ObservedVariance(7)=3.9;             % GPS y, hand measured
 try
